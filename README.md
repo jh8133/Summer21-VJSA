@@ -1,2 +1,7 @@
 # Summer21-VJSA
-Projects for Summer 2021 Vanilla JS Academy
+
+Code for projects in the Fall 2019 [Vanilla JS Academy](https://vanillajsacademy.com) taught by [Chris Ferdinandi](https://gomakethings.com/).
+
+## Project summaries
+01. Toggle Password visibility
+
