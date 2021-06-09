@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Character Count</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			html, body { font-family: Arial, sans-serif; font-size: 1rem; }
+			body { background-color:#fbf6e6; margin: 0 auto; max-width: 40em; width: 88%; }
+			label { display: block; width: 100%; }
+			textarea { min-height: 24em; width: 100%; }
+            #character-count { font-weight: bold; }
+		</style>
+	</head>
+	<body>
+
+		<h1>Character Count</h1>
+
+		<label for="text">Enter your text below.</label>
+		<textarea id="text"></textarea>
+
+		<p>You've entered <span id="character-count">0</span> characters.</p>
+
+		<script>
+			/* Notes:
+			 1. get the textarea element and add a listener for input
+             2. get the element with id #character-count
+             3. input handler
+                a. get the length propery of the event.target
+                b. update the innerText property of the character-count variable
+
+             Additional Information:
+             Use the input event so cut/paste is included
+             Should EOL characters be included in the count?
+             
+    		 use the IIFE code pattern 
+	    	 see: https://ultimatecourses.com/blog/what-function-window-document-undefined-iife-really-means
+			*/
+            (function (d) {
+
+                "use strict";
+
+                const updateCharacterCount = function(event) {
+                    let newLines = this.value.match(/(\r\n|\n|\r)/g);
+                    
+                    if (newLines == null) {
+                        newLines = 0;
+                    }
+                    else {
+                        newLines = newLines.length;
+                    }
+
+                    characterCount.innerHTML = this.textLength - newLines;
+                }
+
+                const characterCount = d.querySelector('#character-count');
+                
+                d.querySelector('#text').addEventListener('input', updateCharacterCount);
+
+            })(document);
+		</script>
+	</body>
+</html>

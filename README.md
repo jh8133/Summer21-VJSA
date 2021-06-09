@@ -8,3 +8,4 @@ Code for projects in the Fall 2021 [Vanilla JS Academy](https://vanillajsacademy
 01. Toggle Password visibility
 02. Multiple Password visibility
 03. Multi Form Toggle Password visibility
+04. Character Count
