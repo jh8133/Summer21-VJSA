@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Character Count</title>
+		<title>Character and Word Count</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<style type="text/css">
@@ -15,28 +15,27 @@
 	</head>
 	<body>
 
-		<h1>Character Count</h1>
+		<h1>Character and Word Count</h1>
 
 		<label for="text">Enter your text below.</label>
 		<textarea id="text"></textarea>
 
-		<p>You've entered <span id="character-count">0</span> characters.</p>
+		<p>You've entered <span id="word-count">0</span> words for a total of <span id="character-count">0</span> characters.</p>
+        <p>By the way, you also have <span id="newline-count">0</span> newlines that can affect the <code>maxlength</code> property.</p>
 
-		<footer>
-			<a href="https://jh8133.github.io/Summer21-VJSA/">Return to All Projects</a>
-		</footer>
+        <footer>
+            <a href="https://jh8133.github.io/Summer21-VJSA/">Return to All Projects</a>
+        </footer>
 
 		<script>
 			/* Notes:
 			 1. get the textarea element and add a listener for input
-             2. get the element with id #character-count
+             2. get all the span elements with data-count attribute
              3. input handler
-                a. get the length propery of the event.target
-                b. update the innerText property of the character-count variable
-
-             Additional Information:
-             Use the input event so cut/paste is included
-             Should EOL characters be included in the count?
+                a. get the length propery of the event.target for charaacters
+                b. split the value property on spaces and use length to get words
+                c. account for all newlines
+                d. update the innerText property of the data-count variables
              
     		 use the IIFE code pattern 
 	    	 see: https://ultimatecourses.com/blog/what-function-window-document-undefined-iife-really-means
@@ -45,7 +44,8 @@
 
                 "use strict";
 
-                const updateCharacterCount = function(event) {
+                const updateSpanFieldsWithCounts = function(event) {
+                    console.log(this);
                     let newLines = this.value.match(/(\r\n|\n|\r)/g);
                     
                     if (newLines == null) {
@@ -55,12 +55,16 @@
                         newLines = newLines.length;
                     }
 
+                    wordCount.innerHTML = this.value.trim().split(/\s+/g).length;
                     characterCount.innerHTML = this.textLength - newLines;
+                    newlineCount.innerHTML = newLines;
                 }
 
+                const wordCount = d.querySelector('#word-count');
                 const characterCount = d.querySelector('#character-count');
+                const newlineCount = d.querySelector('#newline-count');
                 
-                d.querySelector('#text').addEventListener('input', updateCharacterCount);
+                d.querySelector('#text').addEventListener('input', updateSpanFieldsWithCounts);
 
             })(document);
 		</script>
