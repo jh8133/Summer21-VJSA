@@ -36,7 +36,7 @@
                 b. split the value property on spaces and use length to get words
                 c. account for all newlines
                 d. update the innerText property of the data-count variables
-             
+                        
     		 use the IIFE code pattern 
 	    	 see: https://ultimatecourses.com/blog/what-function-window-document-undefined-iife-really-means
 			*/
@@ -55,7 +55,15 @@
                         newLines = newLines.length;
                     }
 
-                    wordCount.innerHTML = this.value.trim().split(/\s+/g).length;
+                    // The code below counts multiple spaces as a word
+                    // wordCount.innerHTML = this.value.trim().split(/[\s]+/g).length;
+
+                    // use the Array.filter method to account for spaces
+                    let words = text.value.split(/[\s]+/g).filter(function (word) {
+		                    return word.length;
+	                    });
+
+                    wordCount.innerHTML = words.length;
                     characterCount.innerHTML = this.textLength - newLines;
                     newlineCount.innerHTML = newLines;
                 }
