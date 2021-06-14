@@ -66,6 +66,7 @@
                         }).catch(function (error) {
                             // There was an error
                             console.warn(error);
+                            quoteDisplay.innerText = 'No quote available at this time.';
                         }
                     );
                 }
