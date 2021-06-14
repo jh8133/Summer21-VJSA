@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Random Ron</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			body {
+				margin: 0 auto;
+				max-width: 40em;
+				width: 88%;
+			}
+		</style>
+	</head>
+	<body>
+
+		<h1>Random Ron</h1>
+
+		<blockquote aria-live="polite"></blockquote>
+
+		<p>
+			<button id="get-quote">More Ron</button>
+		</p>
+
+
+		<script>
+			/* Notes:
+			 1. get the blockquote element so we can update the content with new quotes
+			 2. add a click listener to 
+             3. cllick handler
+                a. fetch() from the API https://ron-swanson-quotes.herokuapp.com/v2/quotes
+                b. check is response OK
+                c. then update the quote
+                d. otherwise indicate no quote available
+                        
+    		 use the IIFE code pattern 
+	    	 see: https://ultimatecourses.com/blog/what-function-window-document-undefined-iife-really-means
+			*/
+            (function (d) {
+
+                "use strict";
+
+                const quoteDisplay = d.querySelector('blockquote');
+                const apiURL = 'https://ron-swanson-quotes.herokuapp.com/v2/quotes';
+
+                let fetchNewQuote = function () {
+    
+                    fetch(apiURL).then(function (response) {
+                        // If the response is successful, get the JSON
+                        if (response.ok) {
+                            return response.json();
+                        }
+
+                        // Otherwise, throw an error
+                        return response.json().then(function (json) {
+                            throw json;
+                        });
+
+                        }).then(function (data) {
+                            // This is the JSON from our response
+                            quoteDisplay.innerText = data;
+                        }).catch(function (error) {
+                            // There was an error
+                            console.warn(error);
+                        }
+                    );
+                }
+
+                d.querySelector('#get-quote').addEventListener('click', fetchNewQuote);
+
+                fetchNewQuote();
+
+            })(document);
+
+		</script>
+	</body>
+</html>
