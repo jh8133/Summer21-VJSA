@@ -10,3 +10,5 @@ Code for projects in the Fall 2021 [Vanilla JS Academy](https://vanillajsacademy
 03. Multi Form Toggle Password visibility
 04. Character Count
 05. Character and Word Count
+06. Character and Word Count with ARIA
+07. Random Ron Quotes
