@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Random Ron</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			body {
+				margin: 0 auto;
+				max-width: 40em;
+				width: 88%;
+			}
+		</style>
+	</head>
+	<body>
+
+		<h1>Unique Ron Swanson Quotes</h1>
+
+		<blockquote aria-live="polite"></blockquote>
+
+		<p>
+			<button id="get-quote">More Ron</button>
+		</p>
+
+        <footer>
+            <a href="https://jh8133.github.io/Summer21-VJSA/">Return to All Projects</a>
+        </footer>
+
+		<script>
+			/* Notes:
+			 1. get the blockquote element so we can update the content with new quotes
+			 2. add a click listener to 
+             3. cllick handler
+                a. fetch() from the API https://ron-swanson-quotes.herokuapp.com/v2/quotes
+                b. check is response OK
+                c. check if the quote exists in the last 50 displayed
+                d. if unique, then update the quote (and add to the last 50 array) otherwise, skip
+                e. otherwise indicate no quote available
+                        
+    		 use the IIFE code pattern 
+	    	 see: https://ultimatecourses.com/blog/what-function-window-document-undefined-iife-really-means
+			*/
+            (function (d) {
+
+                "use strict";
+
+                const quoteDisplay = d.querySelector('blockquote');
+                const apiURL = 'https://ron-swanson-quotes.herokuapp.com/v2/quotes';
+                let lastFifty = [];
+
+                let checkLastFifty = function(newQuote) {
+                    if ( lastFifty.includes(newQuote) ) {
+                        // quote has been displayed in the last fifty
+                        console.log('duplicate quote');
+                        return false;
+                    }
+                    else {
+                        // otherwisae add to the list of last fifty
+                        lastFifty.push(newQuote);
+                        if (lastFifty.length > 50 ) {
+                            // if the list has more than 50 shift the first off the list
+                            console.log('truncating the list');
+                            lastFifty.shift();
+                        }
+                        return true;
+                    }
+                }
+
+                let updateQuote = function (quote) {
+                    quoteDisplay.innerText = quote;
+                }
+
+                let fetchNewQuote = function () {
+    
+                    fetch(apiURL).then(function (response) {
+                        // If the response is successful, get the JSON
+                        if (response.ok) {
+                            return response.json();
+                        }
+
+                        // Otherwise, throw an error
+                        return response.json().then(function (json) {
+                            throw json;
+                        });
+
+                        }).then(function (data) {
+                            // This is the JSON from our response
+                            if (checkLastFifty(data[0])) {
+                                updateQuote(data[0]);
+                            }
+                            else {
+                                fetchNewQuote();
+                            }
+                        }).catch(function (error) {
+                            // There was an error
+                            console.warn(error);
+                            quoteDisplay.innerText = 'No quote available at this time.';
+                        }
+                    );
+                }
+
+                d.querySelector('#get-quote').addEventListener('click', fetchNewQuote);
+
+                fetchNewQuote();
+
+            })(document);
+
+		</script>
+	</body>
+</html>
