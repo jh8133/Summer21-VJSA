@@ -13,3 +13,4 @@ Code for projects in the Fall 2021 [Vanilla JS Academy](https://vanillajsacademy
 06. Character and Word Count with ARIA
 07. Random Ron Quotes
 08. Unique Ron Swanson Quotes
+09. Async/Await Ron Swanson Quotes
