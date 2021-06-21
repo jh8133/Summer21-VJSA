@@ -14,3 +14,4 @@ Code for projects in the Fall 2021 [Vanilla JS Academy](https://vanillajsacademy
 07. Random Ron Quotes
 08. Unique Ron Swanson Quotes
 09. Async/Await Ron Swanson Quotes
+10. Dragon Trainer Monthly
