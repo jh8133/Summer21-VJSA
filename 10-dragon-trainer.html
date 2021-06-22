@@ -83,6 +83,10 @@
                         </article>`;
                 }
 
+                let renderError = function(msg) {
+                    appContent.innerHTML = `<p>${msg}</p>`;
+                }
+
                 let fetchArticleList = function () {
     
                     fetch(apiURL).then(function (response) {
@@ -100,11 +104,14 @@
                             // This is the JSON from our response
                             console.log(data);
                             mainHeader.innerText = data.publication;
+                            if ( !data.articles || data.articles.length < 1 ) {
+                                renderError('No articles are currently available.');
+                            }
                             appContent.innerHTML = data.articles.map(addArticleMarkup).join('');
                         }).catch(function (error) {
                             // There was an error
                             console.warn(error);
-                            appContent.innerHTML = '<p>No articles are currently available.</p>';
+                            renderError('Error retrieving articles.');
                         }
                     );
                 }
