@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Monsters!</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			body {
+				margin: 0 auto;
+				max-width: 40em;
+				width: 88%;
+			}
+
+			/**
+			 * A simple grid layout
+			 */
+			.row {
+				display: grid;
+				grid-template-columns: auto auto auto;
+				text-align: center;
+			}
+
+			.grid {
+				min-height: 6em;
+				padding: 1em;
+			}
+
+			/**
+			 * Make sure images scale
+			 */
+			img {
+				height: auto;
+				max-width: 100%;
+			}
+		</style>
+	</head>
+	<body>
+
+		<h1>Monsters!</h1>
+
+		<div id="app"></div>
+
+		<footer>
+            <a href="https://jh8133.github.io/Summer21-VJSA/">Return to All Projects</a>
+			<hr>
+			<p class="text-small text-muted">Icons by <a href="https://thenounproject.com/term/door/311732/">Jamie Dickinson</a>, <a href="https://thenounproject.com/term/monster/184225/">Nicky Knicky</a>, <a href="https://thenounproject.com/term/monster/1510400/">Alvaro Cabrera</a>, <a href="https://thenounproject.com/term/monster/28460/">Eliricon</a>, <a href="https://thenounproject.com/term/monster/82823/">April Yang</a>, <a href="https://thenounproject.com/term/monster/1062009/">tk66</a>, <a href="https://thenounproject.com/term/monster/24990/">Alex WaZa</a>, <a href="https://thenounproject.com/term/monster/37212/">Husein Aziz</a>, <a href="https://thenounproject.com/term/monster/2236082">iconcheese</a>, and <a href="https://thenounproject.com/term/socks/38451/">Yazmin Alanis</a>.</p>
+		</footer>
+
+		<script>
+			/* Notes:
+			 1. get the #app element to hold the new HTML
+			 2. shuffle the monster array
+             3. build markup for monster grid
+                        
+    		 IIFE code pattern 
+			*/
+            (function (d) {
+
+                "use strict";
+
+				// The monsters and socks
+				let monsters = [
+					'monster1',
+					'monster2',
+					'monster3',
+					'monster4',
+					'monster5',
+					'monster6',
+					'monster7',
+					'monster8',
+					'monster9',
+					'monster10',
+					'monster11',
+					'sock'
+				];
+				let monsterAltText = {
+					 monster1 : 'Profile view facing right of a Yellow monster that has a curly trunk, a tuft of hair and a short tail.' ,
+					 monster2 : 'Front facing view of a Yellow monster with a large single eye in the middle of a large peanut shaped head. Very skinny arms and legs.' ,
+					 monster3 : 'Front facing view of a Green monster with a U shaped body and three digits on each arm.' ,
+					 monster4 : 'Front facing view of a Red monster with four appendages and long dog-like ears.' ,
+					 monster5 : 'Front facing view of a green monster with a a round body and a single large eye.' ,
+					 monster6 : 'Front facing view of a green monster with a triangular body with two legs at the apex and an eye below the mouth.' ,
+					 monster7 : 'Front facing view of a purple monster shaped like a post box with a large single eye and two octopus arms.' ,
+					 monster8 : 'Front facing view of a purple monster with an egg shaped body and two small bear like ears.' ,
+					 monster9 : 'Front facing view of a blue monster with an insect shaped body and two bug like eyes.' ,
+					 monster10 : 'Front facing view of a blue monster with sharp lower teeth and two eyes on multi-level antennae.' ,
+					 monster11 : 'Front facing view of a grey monster with gorilla like features.' ,
+					 sock : 'A pair of socks' 
+				}
+
+                const appContent = d.querySelector('#app');
+
+				/**
+				 * Randomly shuffle an array
+				 * https://stackoverflow.com/a/2450976/1293256
+				 * @param  {Array} array The array to shuffle
+				 * @return {String}      The first item in the shuffled array
+				 */
+				function shuffle (array) {
+
+					let currentIndex = array.length;
+					let temporaryValue, randomIndex;
+
+					// While there remain elements to shuffle...
+					while (0 !== currentIndex) {
+						// Pick a remaining element...
+						randomIndex = Math.floor(Math.random() * currentIndex);
+						currentIndex -= 1;
+
+						// And swap it with the current element.
+						temporaryValue = array[currentIndex];
+						array[currentIndex] = array[randomIndex];
+						array[randomIndex] = temporaryValue;
+					}
+
+					return array;
+				}
+
+				let renderMonsterItem = function (monster) {
+					return `<div class="grid"><img src="./monsters-svg/${monster}.svg" alt="${monsterAltText[monster]}" /></div>`;
+				}
+
+				let renderGrid = function() {
+				//	appContent.innerHTML = `<div class="row">${shuffle(monsters).map(renderMonsterItem).join('')}</div>`;
+				appContent.innerHTML = `<div class="row">${monsters.map(renderMonsterItem).join('')}</div>`;
+				}
+
+				renderGrid();				
+
+            })(document);
+
+		</script>		
+	</body>
+</html>
