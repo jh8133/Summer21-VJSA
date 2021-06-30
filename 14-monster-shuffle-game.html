@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Monsters!</title>
+		<title>Find the Monsters Game</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 		<style type="text/css">
@@ -37,14 +37,15 @@
 	</head>
 	<body>
 
-		<h1>Monsters!</h1>
+		<h1>Find the Monsters Game</h1>
 
 		<div id="app"></div>
+		<div id="replay-btn"></div>
 
 		<footer>
-            <a href="https://jh8133.github.io/Summer21-VJSA/">Return to All Projects</a>
 			<hr>
 			<p class="text-small text-muted">Icons by <a href="https://thenounproject.com/term/door/311732/">Jamie Dickinson</a>, <a href="https://thenounproject.com/term/monster/184225/">Nicky Knicky</a>, <a href="https://thenounproject.com/term/monster/1510400/">Alvaro Cabrera</a>, <a href="https://thenounproject.com/term/monster/28460/">Eliricon</a>, <a href="https://thenounproject.com/term/monster/82823/">April Yang</a>, <a href="https://thenounproject.com/term/monster/1062009/">tk66</a>, <a href="https://thenounproject.com/term/monster/24990/">Alex WaZa</a>, <a href="https://thenounproject.com/term/monster/37212/">Husein Aziz</a>, <a href="https://thenounproject.com/term/monster/2236082">iconcheese</a>, and <a href="https://thenounproject.com/term/socks/38451/">Yazmin Alanis</a>.</p>
+            <p><a href="https://jh8133.github.io/Summer21-VJSA/">Return to All Projects</a></p>
 		</footer>
 
 		<script>
@@ -108,7 +109,8 @@
 				}
 
 				let renderGrid = function() {
-					appContent.innerHTML = `<div class="row">${shuffle(monsters).map(renderMonsterItem).join('')}</div>`;
+				//	appContent.innerHTML = `<div class="row">${shuffle(monsters).map(renderMonsterItem).join('')}</div>`;
+				appContent.innerHTML = `<div class="row">${shuffle(monsters).map(renderMonsterItem).join('')}</div>`;
 				}
 
 				renderGrid();				
