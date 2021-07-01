@@ -33,6 +33,9 @@
 				height: auto;
 				max-width: 100%;
 			}
+			
+			#game-over {width: 100%; text-align: center; }
+
 		</style>
 	</head>
 	<body>
@@ -40,7 +43,6 @@
 		<h1>Find the Monsters Game</h1>
 
 		<div id="app"></div>
-		<div id="replay-btn"></div>
 
 		<footer>
 			<hr>
@@ -50,7 +52,7 @@
 
 		<script>
 			/* Notes:
-			 1. get the #app element to hold the new HTML
+			 1. get the #app and replay-btn elements to hold the new HTML
 			 2. shuffle the monster array
              3. build markup for monster grid
                         
@@ -77,6 +79,15 @@
 				];
 
                 const appContent = d.querySelector('#app');
+				let openDoors = 0;
+				let gameOver = false;
+
+				const renderGameOver = function (message) {
+						appContent.innerHTML += `<section id="game-over"><h2>Game Over</h2>
+								<p class="content">${message}</p>
+								<p><button id="replay" tabindex="0">Play Again</button></p></section>`;
+
+				}
 
 				/**
 				 * Randomly shuffle an array
@@ -84,7 +95,7 @@
 				 * @param  {Array} array The array to shuffle
 				 * @return {String}      The first item in the shuffled array
 				 */
-				function shuffle (array) {
+				const shuffle  = function(array) {
 
 					let currentIndex = array.length;
 					let temporaryValue, randomIndex;
@@ -104,16 +115,71 @@
 					return array;
 				}
 
-				let renderMonsterItem = function (monster) {
-					return `<div class="grid"><img src="./monsters-svg/${monster.name}.svg" alt="${monster.altText}" /></div>`;
+				const processKeys = function(event) {
+					if (event.key == ' ' || event.key == 'Enter') {
+						processClicks(event);
+					}
+				}
+
+				const processClicks = function(event) {
+					if (event.target.id == 'replay' ) {
+						openDoors = 0;
+						shuffle(monsters);
+						renderGrid();	
+						gameOver = false;		
+						return;
+					}
+
+					if (gameOver) {
+						return;
+					}
+
+					let item = event.target.closest('.grid');
+					let index = item.getAttribute('data-id');		
+					
+					if (item == null) {
+						return;
+					}
+					
+					if (item != null || item.getAttribute('data-open') == null) {
+						item.setAttribute('data-open', 'true');
+						item.innerHTML = renderMonsterItem(monsters[index],index);
+						openDoors++;
+					}					
+
+					if (openDoors == 11 || monsters[index].name == 'sock') {
+						gameOver = true;
+						if (monsters[index].name == 'sock') {
+							renderGameOver('Sorry, you found the socks.');
+						}
+						else {
+							renderGameOver('You Won! You found all the Monsters');
+						}
+					}
+
+				}
+
+				let renderDoor = function (index) {
+					return `<div class="grid" data-id="${index}" tabindex="${index+1}" ><img role="button" src="./monsters-svg/door.svg" alt="Open the door to display a monster." /></div>`;
+				}
+
+				let renderMonsterItem = function (monster, index) {
+					return `<img src="./monsters-svg/${monster.name}.svg" alt="${monster.altText}" />`;
 				}
 
 				let renderGrid = function() {
-				//	appContent.innerHTML = `<div class="row">${shuffle(monsters).map(renderMonsterItem).join('')}</div>`;
-				appContent.innerHTML = `<div class="row">${shuffle(monsters).map(renderMonsterItem).join('')}</div>`;
+					let doors = '';
+
+					for (let index = 0; index < 12; index++) {
+						doors += renderDoor(index);					
+					}			
+					appContent.innerHTML = `<div class="row">${doors}</div>`;
 				}
 
-				renderGrid();				
+				d.addEventListener('click', processClicks);
+				d.addEventListener('keydown', processKeys);
+				shuffle(monsters);
+				renderGrid();
 
             })(document);
 
