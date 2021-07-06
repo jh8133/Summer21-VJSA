@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Notebook</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			body {
+				margin: 0 auto;
+				max-width: 40em;
+				width: 88%;
+			}
+
+			label,
+			textarea {
+				display: block;
+				width: 100%;
+			}
+
+			label {
+				margin-bottom: 0.5em;
+			}
+
+			textarea {
+				min-height: 70vh;
+			}
+		</style>
+	</head>
+	<body>
+
+		<h1>Notebook</h1>
+		<p>Add your note below, once saved it will be available for future viewing/editing.</p>
+		<form id="notebook">
+			<label for="note">Your note</label>
+			<textarea id="note"></textarea>
+
+			<p><button>Save Your Note</button></p>
+		</form>
+
+		<footer>
+            <p><a href="https://jh8133.github.io/Summer21-VJSA/">Return to All Projects</a></p>
+		</footer>
+
+		<script>
+			/* Notes:
+			 1. check the local storage
+			 	a. if content exists load the content into the textarea 
+			 2. get the button element and listen for click
+			 3. clickHandler 
+			   a. get the text from the text area
+			   b. save to local storage
+                        
+    		 IIFE code pattern 
+			*/
+            (function (d) {
+
+                "use strict";
+				const saveButton = d.querySelector('button');
+				const noteContent = d.querySelector('#note');
+				const form = document.querySelector('form');
+
+				// Show a status message
+				function showStatus (msg) {
+					// Create a notification
+					let notification = document.createElement('div');
+					notification.setAttribute('aria-live', 'polite');
+
+					// Inject it into the DOM
+					form.append(notification);
+
+					// Add text after it's in the UI
+					setTimeout(function () {
+							notification.textContent = msg;
+						}, 1);
+
+						// Remove it after 4 seconds
+						setTimeout(function () {
+							notification.remove();
+						}, 4000);				
+				}
+
+				const checkStorage = function () {
+					// Get the data
+					let savedData = localStorage.getItem('project15Note');
+					if (savedData) {
+						noteContent.value = savedData;
+					}
+				}
+
+				const clickHandler = function (event) {
+					event.preventDefault();
+					localStorage.setItem('project15Note', noteContent.value);
+					showStatus('Your note was saved');
+				}
+
+				saveButton.addEventListener('click', clickHandler);
+
+				checkStorage();
+
+			})(document);
+
+		</script>
+	</body>
+</html>

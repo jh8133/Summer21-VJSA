@@ -19,3 +19,4 @@ Code for projects in the Fall 2021 [Vanilla JS Academy](https://vanillajsacademy
 12. Sanitized Dragon Trainer Monthly
 13. Monster Shuffle
 14. Monster Shuffle Game
+15. Notebook App
