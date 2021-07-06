@@ -42,6 +42,7 @@
 
 		<h1>Find the Monsters Game</h1>
 
+		<p>How to play: Touch/Click on the doors to reveal all the monsters. If you find the socks, you lose.</p>
 		<div id="app"></div>
 
 		<footer>
@@ -83,7 +84,7 @@
 				let gameOver = false;
 
 				const renderGameOver = function (message) {
-						appContent.innerHTML += `<section id="game-over"><h2>Game Over</h2>
+						appContent.innerHTML += `<section id="game-over" aria-live="polite"><h2>Game Over</h2>
 								<p class="content">${message}</p>
 								<p><button id="replay" tabindex="0">Play Again</button></p></section>`;
 
@@ -160,7 +161,7 @@
 				}
 
 				let renderDoor = function (index) {
-					return `<div class="grid" data-id="${index}" tabindex="${index+1}" ><img role="button" src="./monsters-svg/door.svg" alt="Open the door to display a monster." /></div>`;
+					return `<div class="grid" data-id="${index}" tabindex="${index+1}" aria-live="polite"><img role="button" src="./monsters-svg/door.svg" alt="Door number ${index+1}" /></div>`;
 				}
 
 				let renderMonsterItem = function (monster, index) {
