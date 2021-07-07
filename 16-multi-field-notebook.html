@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Notes with Titles</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			body {
+				margin: 0 auto;
+				max-width: 40em;
+				width: 88%;
+			}
+
+			label,
+			input[type="text"], 
+			textarea {
+				display: block;
+				width: 100%;
+			}
+
+			label {
+				margin-bottom: 0.5em;
+			}
+
+			textarea {
+				min-height: 40vh;
+			}
+		</style>
+	</head>
+	<body>
+
+		<h1>Multi-Field Notebook</h1>
+		<p>Add your title and note below, once saved they will be available for future viewing/editing.</p>
+		<form id="notebook">
+			<label for="title">Title</label>
+			<input type="text" id="title" name="title">
+			<label for="note">Your note</label>
+			<textarea id="note" name="note"></textarea>
+			<p id="notice"></p>
+
+			<p><button>Save Your Note</button></p>
+		</form>
+
+		<footer>
+            <p><a href="https://jh8133.github.io/Summer21-VJSA/">Return to All Projects</a></p>
+		</footer>
+
+		<script>
+			/* Notes:
+			 1. check the local storage
+			 	a. if content exists parse and load the content  
+				b. update the last saved notice
+			 2. get the form element and listen for submit
+			 3. submitHandler 
+			   a. get the formData from the form
+			   b. serialize the form data
+			   b. add timestamp and save to local storage
+                        
+    		 IIFE code pattern 
+			*/
+            (function (d) {
+
+                "use strict";
+				/*!
+				* Serialize all form data into an object
+				* (c) 2021 Chris Ferdinandi, MIT License, https://gomakethings.com
+				* @param  {FormData} data The FormData object to serialize
+				* @return {String}        The serialized form data
+				*/
+				function serialize (data) {
+					let obj = {};
+					for (let [key, value] of data) {
+						if (obj[key] !== undefined) {
+							if (!Array.isArray(obj[key])) {
+								obj[key] = [obj[key]];
+							}
+							obj[key].push(value);
+						} else {
+							obj[key] = value;
+						}
+					}
+					return obj;
+				}				
+				let noteForm = d.querySelector('#notebook');
+				let lastSavedNotice = d.querySelector('#notice');
+
+				// Show a status message
+				function showStatus (element, msg) {
+					// Create a notification
+					let notification = document.createElement('div');
+					notification.setAttribute('aria-live', 'polite');
+
+					// Inject it into the DOM
+					element.append(notification);
+
+					// Add text after it's in the UI
+					setTimeout(function () {
+							notification.textContent = msg;
+						}, 1);
+
+						// Remove it after 3 seconds
+						setTimeout(function () {
+							notification.remove();
+						}, 3000);				
+				}
+
+				const checkStorage = function () {
+					// Get the data
+					let savedData = JSON.parse(localStorage.getItem('project16Note'));
+					if (savedData) {
+						if(savedData.title) {
+							noteForm.querySelector('#title').value = savedData.title;
+						}
+						if (savedData.note) {
+							noteForm.querySelector('#note').value = savedData.note;
+						}
+						if (savedData.timestamp) {
+							showStatus(lastSavedNotice, `Last saved: ${savedData.timestamp}`)
+						}
+					}
+				}
+
+				const submitHandler = function (event) {
+					event.preventDefault();
+
+					let data = new FormData(event.target);
+					let timestamp = new Date().toLocaleString(navigator.language, {dateStyle: 'medium', timeStyle: 'medium', hour12: false});
+					data.append('timestamp', timestamp);
+				
+					localStorage.setItem('project16Note', JSON.stringify(serialize(data)));
+					showStatus(noteForm, 'Your note was saved');
+					showStatus(lastSavedNotice, `Last saved: ${timestamp}`)
+				}
+
+				noteForm.addEventListener('submit', submitHandler);
+
+				checkStorage();
+
+			})(document);
+
+		</script>
+	</body>
+</html>
