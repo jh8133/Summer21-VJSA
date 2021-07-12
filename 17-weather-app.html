@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Weather App</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			html, body { font-family: Arial, sans-serif; font-size: 1rem; }
+			body { background-color:#fbf6e6; margin: 0 auto; max-width: 40em; width: 88%; }
+
+			.icon { max-width: 2em; vertical-align: inherit; }
+			.weather { border: 1px soild #000; line-height: 2.5em; }
+		</style>
+	</head>
+	<body>
+
+		<h1>Weather App</h1>
+
+		<div id="app">Getting local weather...</div>
+
+		<footer>
+			<a href="https://jh8133.github.io/Summer21-VJSA/">Return to All Projects</a>
+		</footer>
+
+		<script>
+			/* Notes:
+			 1. get the app element so we can update the weather
+		  	 6. on first load check storage for location info
+			   a. if location stored use that
+ 			   b. if not, use the navigator.location API to determine user location
+			     i. if cancel/decline then notify user that no location available
+			     ii. if approve update with current location and fetch Weather
+             2. fetch from API
+                a. fetch() from the API https://api.weatherbit.io/v2.0/current
+                b. check is response OK
+                c. then update the weather
+                d. otherwise indicate no weather available                        
+			 3. Cache the Weather request expire after 15min
+			*/
+            (function (d) {
+
+				"use strict";
+
+				const app = d.querySelector('#app');
+				let apiURL = 'https://api.weatherbit.io/v2.0/current/?key=012690b48a284961a5dc0746eb6ca5e2';
+				let location = {ts: '', lat: '', lon: '', units: 'I', weather: {}};
+				let unitMap = {};
+				unitMap.M = {temp: '&deg;C', wind: 'm/s'};
+				unitMap.I = {temp: '&deg;F', wind: 'mph'};
+
+                /**
+                 * Sanitize and encode all HTML in a user-submitted string
+                 * https://portswigger.net/web-security/cross-site-scripting/preventing
+                 * @param  {String} str  The user-submitted string
+                 * @return {String} str  The sanitized string
+                 */
+				 function sanitizeHTML (str) {
+                    return str.replace(/javascript:/gi, '').replace(/[^\w-_. ]/gi, function (c) {
+                        return `&#${c.charCodeAt(0)};`;
+                    });
+                }
+		
+
+				/**
+				 * Log an error message
+				 * @param  {Object} error The error details
+				 */
+				function locationError (error) {
+					console.warn('locationError', error);
+					status = checkStorage();
+					renderWeather(status);
+				}
+
+				let fetchAPI = async function (position) {
+					location.lon = position.coords.longitude || '';
+					location.lat = position.coords.latitude || '';
+
+					let uri = `${apiURL}&lat=${location.lat}&lon=${location.lon}&units=${location.units}`;
+
+					if (checkStorage() == true) {
+						renderWeather(true);
+					}
+					else {
+
+						try {
+							console.log('fetchAPI data', location, uri);
+							let response = await fetch(uri);
+							// If the response is successful, get the JSON
+							if (!response.ok) {
+								throw 'Something went wrong with fetch()';
+							}
+							console.log('fetchAPI response', response);
+							let data = await response.json();
+
+							// This is the JSON from our response
+							location.ts = Date.now();
+							location.weather = data.data[0];
+							localStorage.setItem('project17Weather', JSON.stringify(location));
+							renderWeather(true);
+						}
+						catch (error) {
+							// There was an error
+							console.warn('fetchAPI catch()', error);
+							renderWeather(false);
+						}
+					}
+				}
+
+				const checkStorage = function () {
+					let cacheCheck = Date.now();
+					
+					// Get the data
+					let savedData = JSON.parse(localStorage.getItem('project17Weather'));
+					console.log('checkStorage', cacheCheck, savedData);
+
+					if (savedData && (cacheCheck <= savedData.ts + (15*60*1000))) {
+						// 15 minute cache age
+						console.log('checkStorage savedData', savedData);
+						location = savedData;
+						return true;
+					}
+					else {
+						return false;
+					}
+				}
+
+				const renderWeather = function(status) {
+					console.log('renderWeather', status, location);
+					if (!status) {
+						app.innerText = 'No location available, update the form below'
+					}
+					else {
+						let icon = '';
+						if (location.weather.weather.icon) {
+							icon = `<img class="icon" src="https://www.weatherbit.io/static/img/icons/${location.weather.weather.icon}.png" />`;
+						}
+						
+						app.innerHTML = `
+						<p>The weather in ${location.weather.city_name}, ${location.weather.state_code} is</p>
+						<table class="weather">
+							<tr><td>Outlook</td><td>${icon} ${location.weather.weather.description}</td></tr>
+							<tr><td>Current Temp.</td><td>${location.weather.temp} ${unitMap[location.units].temp}</td></tr>
+							<tr><td>Feels Like</td><td>${location.weather.app_temp}</td></tr>
+							<tr><td>Wind Speed</td><td>${location.weather.wind_spd} ${unitMap[location.units].wind}</td></tr>
+							<tr><td>Wind Direction</td><td>${location.weather.wind_cdir}</td></tr>
+						</table>`;
+					}
+
+				}
+
+
+				// Request access to the user's location
+				if('geolocation' in navigator) {
+					navigator.geolocation.getCurrentPosition(fetchAPI, locationError, {
+						timeout: 6000,  
+						maximumAge: 2500
+					});
+				} 
+
+			})(document);
+		</script>
+	</body>
+</html>

@@ -21,3 +21,6 @@ Code for projects in the Fall 2021 [Vanilla JS Academy](https://vanillajsacademy
 14. Monster Shuffle Game
 15. Notebook App
 16. Multi-Field Notebook
+17. Weather App
+18. Weather App with Plugin
+
