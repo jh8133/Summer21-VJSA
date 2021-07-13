@@ -21,9 +21,11 @@ var WeatherPlugin = function (options) {
 
 	const app = document.querySelector(settings.selector);
 	let apiURL = 'https://api.weatherbit.io/v2.0/current/?key=';
-		let unitMap = {};
-	unitMap.M = {temp: '&deg;C', wind: 'm/s'};
-	unitMap.I = {temp: '&deg;F', wind: 'mph'};
+	let unitMap = {
+		I: {temp: '&deg;F', wind: 'mph', precip: 'in'},
+		M: {temp: '&deg;C', wind: 'm/s', precip: 'mm'},
+		S: {temp: '&deg;K', wind: 'm/s', precip: 'mm'}
+	};
 
 	/**
 	 * Sanitize and encode all HTML in a user-submitted string
@@ -89,6 +91,12 @@ var WeatherPlugin = function (options) {
 		let savedData = JSON.parse(localStorage.getItem('project18Weather'));
 		console.log('checkStorage', cacheCheck, savedData);
 
+		if (settings.units != savedData.units) {
+			return false;
+		}
+		if (settings.lat != savedData.lat || settings.lon != savedData.lon) {
+			return false;
+		}
 		if (savedData && (cacheCheck <= savedData.ts + (15*60*1000))) {
 			// 15 minute cache age
 			console.log('checkStorage savedData', savedData);
