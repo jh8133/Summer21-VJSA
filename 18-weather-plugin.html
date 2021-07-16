@@ -18,17 +18,16 @@
 
 		<h1>Weather App</h1>
 
-		<div id="app">Getting local weather...</div>
+		<div id="weather">Getting local weather...</div>
 
 		<footer>
 			<a href="https://jh8133.github.io/Summer21-VJSA/">Return to All Projects</a>
 		</footer>
 		<script>
-			WeatherPlugin({
-				selector: '#app',
-				apiKey: '012690b48a284961a5dc0746eb6ca5e2',
+			WeatherPlugin('012690b48a284961a5dc0746eb6ca5e2', {
+				selector: '#weather',
 				icon: true,
-				units: 'M',
+				units: 'I',
 				cacheTime: 1
 			});
 		</script>

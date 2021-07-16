@@ -1,11 +1,10 @@
-var WeatherPlugin = function (options) {
+var WeatherPlugin = function (apiKey, options) {
 
 	"use strict";
 
 	// Default settings
 	var defaults = {
 		selector: '#app',
-		apiKey: '',
 		icon: true,
 		units: 'I',
 		cacheTime: 15,
@@ -17,10 +16,13 @@ var WeatherPlugin = function (options) {
 
 	// Merge user options into defaults
 	var settings = Object.assign({}, defaults, options);
-	console.log(settings);
+
+	if (!apiKey) {
+		console.log('API Key required');
+	}
 
 	const app = document.querySelector(settings.selector);
-	let apiURL = 'https://api.weatherbit.io/v2.0/current/?key=';
+	let apiURL = `https://api.weatherbit.io/v2.0/current/?key=${apiKey}`;
 	let unitMap = {
 		I: {temp: '&deg;F', wind: 'mph', precip: 'in'},
 		M: {temp: '&deg;C', wind: 'm/s', precip: 'mm'},
@@ -53,7 +55,7 @@ var WeatherPlugin = function (options) {
 		settings.lon = position.coords.longitude || '';
 		settings.lat = position.coords.latitude || '';
 
-		let uri = `${apiURL}${settings.apiKey}&lat=${settings.lat}&lon=${settings.lon}&units=${settings.units}`;
+		let uri = `${apiURL}&lat=${settings.lat}&lon=${settings.lon}&units=${settings.units}`;
 
 		if (checkStorage() == true) {
 			renderWeather(true);
