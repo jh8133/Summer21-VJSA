@@ -31,16 +31,20 @@
              */
             let pastDate = dateHelper({
                 fromNow: '-2d',
-                locale: 'en-UK',
-                dateStyle: 'long',
-                timeStyle: 'long'
+                locale: 'en-GB',
+                format: {
+                    dateStyle: 'full',
+                    timeStyle: 'long',
+                }
             });
 
             let futureDate = dateHelper({
                 fromNow: '+3w',
                 locale: 'en-US',
-                dateStyle: 'short',
-                timeStyle: 'short'
+                format: {
+                    dateStyle: 'short',
+                    timeStyle: 'short',
+                }
             });
             console.log('two days ago:', pastDate, 'in 3 weeks:', futureDate);
 

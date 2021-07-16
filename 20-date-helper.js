@@ -6,17 +6,51 @@ var dateHelper = function (options) {
 
     "use strict";
 
+    /*!
+    * Deep merge two or more objects into the first.
+    * (c) 2021 Chris Ferdinandi, MIT License, https://gomakethings.com
+    * @param   {Object} objects  The objects to merge together
+    * @returns {Object}          Merged values of defaults and options
+    */
+    function deepAssign () {
+
+        // Make sure there are objects to merge
+        let len = arguments.length;
+        if (len < 1) return;
+        if (len < 2) return arguments[0];
+
+        // Merge all objects into first
+        for (let i = 1; i < len; i++) {
+            for (let key in arguments[i]) {
+                // If it's an object, recursively merge
+                // Otherwise, push to key
+                if (Object.prototype.toString.call(arguments[i][key]) === '[object Object]') {
+                    arguments[0][key] = deepAssign(arguments[0][key] || {}, arguments[i][key]);
+                } else {
+                    arguments[0][key] = arguments[i][key];
+                }
+            }
+        }
+
+        return arguments[0];
+
+    }
+
     // Default settings
     var defaults = {
         fromNow: '',
         locale: 'en-US',
-        dateStyle: 'short',
-        timeStyle: 'long',
-        hour12: true
+	    format: {
+	        dateStyle: 'short',
+        	timeStyle: 'long',
+	        hour12: true
+	    }
     };
 
-    // Merge user options into defaults
-    var settings = Object.assign({}, defaults, options);
+    // Deep merge user options and defaults
+    var settings = deepAssign(defaults, options);
+    console.log(settings);
+    
 
     /**
      * Get a fomratted date in the future (or past) from a timestamp
@@ -63,7 +97,6 @@ var dateHelper = function (options) {
         }
     }
 
-        
     let ts = Date.now();
     let offset = timestampMath(settings.fromNow);
 
@@ -71,11 +104,7 @@ var dateHelper = function (options) {
     let dateObj = new Date(ts + offset);
     // Get a formatted string
     // returns something like "July 6, 2021 at 1:42 PM"
-    let dateText = dateObj.toLocaleString(settings.locale, {
-        dateStyle: settings.dateStyle,
-        timeStyle: settings.timeStyle,
-        hour12: settings.hour12
-    });
+    let dateText = dateObj.toLocaleString(settings.locale, settings.format);
     
     if (dateText) {
         return dateText;
