@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Weather App using a Plugin</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<script src="18-weather-plugin.js" ></script>
+		<style type="text/css">
+			html, body { font-family: Arial, sans-serif; font-size: 1rem; }
+			body { background-color:#fbf6e6; margin: 0 auto; max-width: 40em; width: 88%; }
+
+			.icon { max-width: 2em; vertical-align: inherit; }
+			.weather { border: 1px soild #000; line-height: 2.5em; }
+		</style>
+	</head>
+	<body>
+
+		<h1>Weather App</h1>
+
+		<div id="weather">Getting local weather...</div>
+
+		<footer>
+			<a href="https://jh8133.github.io/Summer21-VJSA/">Return to All Projects</a>
+		</footer>
+		<script>
+			WeatherPlugin('012690b48a284961a5dc0746eb6ca5e2', {
+				selector: '#weather',
+				icon: true,
+				units: 'I',
+				cacheTime: 1
+			});
+		</script>
+	</body>
+</html>
