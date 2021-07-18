@@ -57,38 +57,34 @@ var dateHelper = function (options) {
      * @return {timestamp} A
      */
     function timestampMath (fromNowStr) {
+        let regexp = new RegExp(/(\+|-)(\d{1,5})((ms)|s|i|h|d|w|m|y)/mi);
         let offset = 0;
 
-        let regexp = new RegExp(/(\+|-)(\d{1,5})((ms)|s|i|h|d|w|m|y)/mi);
+        // Timestamp Math
+        let validTimes = {
+            ms: 1,
+            s: 1000,
+            i: 1000 * 60,
+            h: 1000 * 60 * 60,
+            d: 1000 * 60 * 60 * 24,
+            w: 1000 * 60 * 60 * 24 * 7,
+            m: 1000 * 60 * 60 * 24 * 30,
+            y: 1000 * 60 * 60 * 24 * 365,
+        }
+
         let fromNowArray = fromNowStr.match(regexp);
 
-        // Timestamp Math
-        switch (fromNowArray[3].toLowerCase()) {
-            case 'ms': // milliseconds = 1ms 
-                offset = 1;
-                break;
-            case 's': // seconds = 1000ms 
-                offset = 1000;
-                break;
-            case 'i': // 1 minute = 1000ms * 60s 
-                offset = 1000 * 60;
-                break;
-            case 'h': // hours = 1000ms * 60s * 60m
-                offset = 1000 * 60 * 60;
-                break;
-            case 'd': // day = 1000ms * 60s * 60m * 24h
-                offset = 1000 * 60 * 60 * 24;
-                break;
-            case 'w': // weeks = 1000ms * 60s * 60m * 24h * 7d
-                offset = 1000 * 60 * 60 * 24 * 7;
-                break;
-            case 'm': // months = 1000ms * 60s * 60m * 30d (approximately)
-                offset = 1000 * 60 * 60 * 24 * 30;
-                break;
-            case 'y': // 1 year = 1000ms * 60s * 60m * 24h * 365d
-                offset = 1000 * 60 * 60 * 24 * 365;
-                break;
+        if (!fromNowArray || !fromNowArray.len >= 4) {
+            throw 'invalid input, Usage: +|-Nms|s|i|h|d|w|m|y, where N is the desired units';
         }
+        else {
+            offset = validTimes[fromNowArray[3].toLowerCase()];
+            if (!offset) {
+                throw 'invalid input, Usage: +|-Nms|s|i|h|d|w|m|y, where N is the desired units';
+            }
+        }
+
+
         if (fromNowArray[1] == '+') {
             return fromNowArray[2] * offset;
         }
