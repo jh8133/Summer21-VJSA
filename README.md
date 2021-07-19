@@ -25,4 +25,5 @@ Code for projects in the Fall 2021 [Vanilla JS Academy](https://vanillajsacademy
 18. Weather App with Plugin
 19. Weather App Object of Objects
 20. Date Helper Function
+21. Date Utility Revealing Module Pattern
 
