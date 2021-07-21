@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Date Utility Function Constructor Pattern</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			body {
+				margin: 0 auto;
+				max-width: 40em;
+				width: 88%;
+			}
+		</style>
+
+        <script src="22-date-utility-constructor.js" ></script>
+
+	</head>
+	<body>
+
+		<h1>Date Utility Function Constructor Pattern</h1>
+
+		<p>View the console for results.</p>
+
+		<footer>
+			<a href="https://jh8133.github.io/Summer21-VJSA/">Return to All Projects</a>
+		</footer>
+
+		<script>
+            let now = new DateUtil();
+            let pastDate = now.daysFromNow(-2);
+            let dateString2 = now.weeksFromNow(3).getDateString();
+            
+            let dateString1 = pastDate.getDateString({
+                locale: 'en-GB',
+                format: {
+                    dateStyle: 'full',
+                    timeStyle: 'long',
+                }
+            });
+
+            console.log(now, 'two days ago:', dateString1, 'in 3 weeks:', dateString2);
+
+		</script>
+	</body>
+</html>
