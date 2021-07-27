@@ -27,10 +27,10 @@
 
 		<script>
             let now = new DateUtil();
-			console.log(now._date);
+			console.log(now.timestamp);
 			
-			now._date = 12345;
-			console.log(now._date);
+			now.timestamp = 12345;
+			console.log(now.timestamp);
 
             let pastDate = now.daysFromNow(-2);
             let dateString2 = now.monthsFromNow(6).weeksFromNow(3).getDateString();
@@ -44,6 +44,14 @@
             });
 
             console.log(now, 'two days ago:', dateString1, 'in 6 months, 3 weeks:', dateString2);
+
+            let y2k = new DateUtil('01/01/2000').getDateString({
+                format: {
+                    dateStyle: 'medium',
+                    timeStyle: 'short',
+                }
+            });
+            console.log('Y2K', y2k);
 
 		</script>
 	</body>

@@ -86,26 +86,19 @@ let DateUtil = (function() {
 
     /**
      * The Constructor object
-     * @param {timestamp} timestamp The timestamp to use for the methods
+     * @param {date} Integer|String|Date The date or timestamp to use for the methods
     */
-    function Constructor (timestamp) {
-        let ts = timestamp ? new Date(timestamp).getTime() : new Date().getTime();
-
-        Object.freeze(ts);
+    function Constructor (date) {
 
         // Set properties
         Object.defineProperties(this, {
-            _date: {value: ts},
-            settings: {value: {
-                locale: navigator.language,
-                format: {}
-            }, writeable: true}
+            timestamp: {value: date ? new Date(date).getTime() : new Date().getTime()}
         });
     }
 
     /**
      * Get a formatted date string from a given timestamp
-     * @param {Object} options  an Object including date, locale, and format
+     * @param {Object} options  an Object including locale, and format
      * @return {string}
      */
      Constructor.prototype.getDateString = function (options = {}) {
@@ -119,7 +112,7 @@ let DateUtil = (function() {
         var settings = deepAssign(defaults, options);
      
         // Convert a timestamp into a Date object
-        let dateObj = new Date(this._date);
+        let dateObj = new Date(this.timestamp);
         
         // Format the ts as a string
         let dateText = dateObj.toLocaleString(settings.locale, settings.format);
