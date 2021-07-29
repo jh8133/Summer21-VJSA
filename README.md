@@ -29,3 +29,4 @@ Code for projects in the Fall 2021 [Vanilla JS Academy](https://vanillajsacademy
 22. Date Utility Constructor Pattern
 23. Date Utility with Chaining
 24. Date Utility with Private Properties
+25. Dice Roller
