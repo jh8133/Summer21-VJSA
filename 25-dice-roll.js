@@ -112,10 +112,8 @@ let DiceRoller = (function () {
 
       });
     }
-
     // Listen for clicks on the button
     btn.addEventListener('click', rollDice);
-
   }
 
   /**
@@ -125,7 +123,7 @@ let DiceRoller = (function () {
   */
   function Constructor(btnSelector='#dice', resultSelector='#result', qty) {
 
-      let numDice = NaN == qty ? 1 : qty;
+      let numDice = !qty || qty == NaN ? 1 : qty;
       let sides = [1, 2, 3, 4, 5, 6];
 
       // Get the elementa
@@ -133,6 +131,9 @@ let DiceRoller = (function () {
       let result = document.querySelector(resultSelector);
       
       result.setAttribute('aria-live', `polite`);
+      
+      // Make sure elements exist
+	    if (!btn || !result) throw 'Dice and result elements must be provided.';
       
       // Inject a button into the DOM
       let rollButton = createBtn(btn, numDice);
